@@ -116,7 +116,6 @@ session = cluster.connect()
 #### Create Keyspace
 
 ```py
-# TO-DO: Create a Keyspace 
 try:
     session.execute("""
     CREATE KEYSPACE IF NOT EXISTS project1b
@@ -131,7 +130,6 @@ except Exception as e:
 #### Set Keyspace
 
 ```py
-# TO-DO: Set KEYSPACE to the keyspace specified above
 try:
     session.set_keyspace('project1b')
 except Exception as e:
@@ -154,9 +152,6 @@ Query Reasoning:
 A composite primary key was needed becuase no column had unique data. I placed the session_id and item_in_session columns as the primary key/partition key because the WHERE statement was going to focus on these areas.
 
 ```py
-## TO-DO: Query 1:  Give me the artist, song title and song's length in the music app history that was heard during \
-## sessionId = 338, and itemInSession = 4
-
 table_query = """
     CREATE TABLE IF NOT EXISTS listening_library (
         session_id int, 
@@ -179,15 +174,11 @@ with open(file, encoding = 'utf8') as f:
     csvreader = csv.reader(f)
     next(csvreader) # skip header
     for line in csvreader:
-## TO-DO: Assign the INSERT statements into the `query` variable
         query = "INSERT INTO listening_library (session_id, item_in_session, artist, length, song)"
         query = query + " VALUES (%s, %s, %s, %s, %s)"
-        ## TO-DO: Assign which column element should be assigned for each column in the INSERT statement.
-        ## For e.g., to INSERT artist_name and user first_name, you would change the code below to `line[0], line[1]`
         session.execute(query, (int(line[8]), int(line[3]), line[0], float(line[5]), line[9]))
 
 
-## TO-DO: Add in the SELECT statement to verify the data was entered into the table
 query = """SELECT * 
            FROM listening_library 
            WHERE session_id = %s AND item_in_session = %s
@@ -211,9 +202,6 @@ Query Reasoning:
 A composite primary key and clustering column was needed for this table. I placed the user_id and session_id columns as the partition key and the item_in_session as a clustering column in the primary key as sorting was needed on this field based on the query request. In the print, I included the item session to show the song title was listed in asc order.
 
 ```py
-## TO-DO: Query 2: Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name)\
-## for userid = 10, sessionid = 182
-
 table_query = """
     CREATE TABLE IF NOT EXISTS artist_library (
         user_id int,
@@ -238,11 +226,8 @@ with open(file, encoding = 'utf8') as f:
     csvreader = csv.reader(f)
     next(csvreader) # skip header
     for line in csvreader:
-## TO-DO: Assign the INSERT statements into the `query` variable
         query = "INSERT INTO artist_library (user_id, session_id, item_in_session, artist, song, first_name, last_name)"
         query = query + " VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        ## TO-DO: Assign which column element should be assigned for each column in the INSERT statement.
-        ## For e.g., to INSERT artist_name and user first_name, you would change the code below to `line[0], line[1]`
         session.execute(query, (int(line[10]), int(line[8]), int(line[3]), line[0], line[9], line[1], line[4]))
 
 
@@ -273,9 +258,6 @@ Query Reasoning:
 A composite primary key was needed for this table. I placed the song and user_id columns as the partition key because more then one column was needed to uniquely identify the rows. 
 
 ```py
-## TO-DO: Query 3: Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
-
-# Creating table modeled to handle this specific type of query
 table_query = """
     CREATE TABLE IF NOT EXISTS song_listeners_library (
         song text,
@@ -301,8 +283,6 @@ with open(file, encoding = 'utf8') as f:
         query = "INSERT INTO song_listeners_library (song, user_id, first_name, last_name) "
         query = query + "VALUES (%s, %s, %s, %s)"
         session.execute(query, (line[9], int(line[10]),  line[1], line[4]))
-
-## TO-DO: Query 3: Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
 
 
 query = """
