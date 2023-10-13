@@ -95,8 +95,7 @@ Number of rows in event_datafile_new.csv: 6821
 
 #### The event_datafile_new.csv contains the following columns:
 
-
-
+![](/assets/img/)
 
 
 
