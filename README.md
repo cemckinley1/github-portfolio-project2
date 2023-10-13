@@ -167,7 +167,6 @@ except Exception as e:
     print(e)
 
 
-# We have provided part of the code to set up the CSV file. Please complete the Apache Cassandra code below#
 file = 'event_datafile_new.csv'
 
 with open(file, encoding = 'utf8') as f:
@@ -219,7 +218,6 @@ except Exception as e:
     print(e)
 
 
-# We have provided part of the code to set up the CSV file. Please complete the Apache Cassandra code below#
 file = 'event_datafile_new.csv'
 
 with open(file, encoding = 'utf8') as f:
@@ -273,7 +271,6 @@ except Exception as e:
     print(e) 
 
 
-# We have provided part of the code to set up the CSV file. Please complete the Apache Cassandra code below#
 file = 'event_datafile_new.csv'   
 
 with open(file, encoding = 'utf8') as f:
