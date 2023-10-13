@@ -150,6 +150,9 @@ except Exception as e:
 ## Query 1
 Give me the artist, song title and song's length in the music app history that was heard during sessionId = 338, and itemInSession = 4
 
+Query Reasoning:
+A composite primary key was needed becuase no column had unique data. I placed the session_id and item_in_session columns as the primary key/partition key because the WHERE statement was going to focus on these areas.
+
 ```py
 ## TO-DO: Query 1:  Give me the artist, song title and song's length in the music app history that was heard during \
 ## sessionId = 338, and itemInSession = 4
@@ -203,6 +206,9 @@ Artist: Faithless , Song: Music Matters (Mark Knight Dub) , Length: 495.30731201
 
 ## Query 2
 Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
+
+Query Reasoning:
+A composite primary key and clustering column was needed for this table. I placed the user_id and session_id columns as the partition key and the item_in_session as a clustering column in the primary key as sorting was needed on this field based on the query request. In the print, I included the item session to show the song title was listed in asc order.
 
 ```py
 ## TO-DO: Query 2: Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name)\
@@ -265,6 +271,9 @@ Artist: Lonnie Gordon , Song: Catch You Baby (Steve Pitron & Max Sanna Radio Edi
 
 ## Query 3
 Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
+
+Query Reasoning:
+A composite primary key was needed for this table. I placed the song and user_id columns as the partition key because more then one column was needed to uniquely identify the rows. 
 
 ```py
 ## TO-DO: Query 3: Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
