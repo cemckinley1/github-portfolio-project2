@@ -167,3 +167,192 @@ try:
     session.execute(table_query)
 except Exception as e:
     print(e)
+
+
+# We have provided part of the code to set up the CSV file. Please complete the Apache Cassandra code below#
+file = 'event_datafile_new.csv'
+
+with open(file, encoding = 'utf8') as f:
+    csvreader = csv.reader(f)
+    next(csvreader) # skip header
+    for line in csvreader:
+## TO-DO: Assign the INSERT statements into the `query` variable
+        query = "INSERT INTO listening_library (session_id, item_in_session, artist, length, song)"
+        query = query + " VALUES (%s, %s, %s, %s, %s)"
+        ## TO-DO: Assign which column element should be assigned for each column in the INSERT statement.
+        ## For e.g., to INSERT artist_name and user first_name, you would change the code below to `line[0], line[1]`
+        session.execute(query, (int(line[8]), int(line[3]), line[0], float(line[5]), line[9]))
+
+
+## TO-DO: Add in the SELECT statement to verify the data was entered into the table
+query = """SELECT * 
+           FROM listening_library 
+           WHERE session_id = %s AND item_in_session = %s
+"""
+try:
+    rows = session.execute(query, (338,4))
+except Exception as e:
+    print (e)
+
+for row in rows:
+    print ("Artist:", row.artist,", Song:", row.song,", Length:", row.length)
+```
+Artist: Faithless , Song: Music Matters (Mark Knight Dub) , Length: 495.30731201171875
+
+---
+
+## Query 2
+Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
+
+```py
+## TO-DO: Query 2: Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name)\
+## for userid = 10, sessionid = 182
+
+table_query = """
+    CREATE TABLE IF NOT EXISTS artist_library (
+        user_id int,
+        session_id int,
+        item_in_session int,
+        artist text,
+        song text,
+        first_name text,
+        last_name text,
+        PRIMARY KEY ((user_id, session_id), item_in_session)
+    );"""
+try:
+    session.execute(table_query)
+except Exception as e:
+    print(e)
+
+
+# We have provided part of the code to set up the CSV file. Please complete the Apache Cassandra code below#
+file = 'event_datafile_new.csv'
+
+with open(file, encoding = 'utf8') as f:
+    csvreader = csv.reader(f)
+    next(csvreader) # skip header
+    for line in csvreader:
+## TO-DO: Assign the INSERT statements into the `query` variable
+        query = "INSERT INTO artist_library (user_id, session_id, item_in_session, artist, song, first_name, last_name)"
+        query = query + " VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        ## TO-DO: Assign which column element should be assigned for each column in the INSERT statement.
+        ## For e.g., to INSERT artist_name and user first_name, you would change the code below to `line[0], line[1]`
+        session.execute(query, (int(line[10]), int(line[8]), int(line[3]), line[0], line[9], line[1], line[4]))
+
+
+
+query = """SELECT * 
+           FROM artist_library 
+           WHERE user_id = %s AND session_id = %s
+"""
+try:
+    rows = session.execute(query, (10,182))
+except Exception as e:
+    print (e)
+
+for row in rows:
+    print ("Artist:", row.artist,", Song:", row.song,", Item Session:", row.item_in_session,", User:", row.first_name, row.last_name)
+```
+Artist: Down To The Bone , Song: Keep On Keepin' On , Item Session: 0 , User: Sylvie Cruz
+
+Artist: Three Drives , Song: Greece 2000 , Item Session: 1 , User: Sylvie Cruz
+
+Artist: Sebastien Tellier , Song: Kilometer , Item Session: 2 , User: Sylvie Cruz
+
+Artist: Lonnie Gordon , Song: Catch You Baby (Steve Pitron & Max Sanna Radio Edit) , Item Session: 3 , User: Sylvie Cruz
+    
+---
+
+## Query 3
+Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
+
+```py
+## TO-DO: Query 3: Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
+
+# Creating table modeled to handle this specific type of query
+table_query = """
+    CREATE TABLE IF NOT EXISTS song_listeners_library (
+        song text,
+        user_id int,        
+        first_name text,
+        last_name text,
+        PRIMARY KEY (song, user_id)
+    );
+"""
+try:
+    session.execute(table_query)
+except Exception as e:
+    print(e) 
+
+
+# We have provided part of the code to set up the CSV file. Please complete the Apache Cassandra code below#
+file = 'event_datafile_new.csv'   
+
+with open(file, encoding = 'utf8') as f:
+    csvreader = csv.reader(f)
+    next(csvreader) # skip header
+    for line in csvreader:
+        query = "INSERT INTO song_listeners_library (song, user_id, first_name, last_name) "
+        query = query + "VALUES (%s, %s, %s, %s)"
+        session.execute(query, (line[9], int(line[10]),  line[1], line[4]))
+
+## TO-DO: Query 3: Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
+
+
+query = """
+    SELECT *
+    FROM song_listeners_library
+    WHERE song='All Hands Against His Own'
+"""
+try:
+    rows = session.execute(query)
+except Exception as e:
+    print(e)
+    
+for row in rows:
+    print ("User:", row.first_name, row.last_name)
+```
+User: Jacqueline Lynch
+
+User: Tegan Levine
+
+User: Sara Johnson
+
+---
+## Drop the tables before closing out the sessions
+
+```py
+query = "drop table listening_library"
+try:
+    rows = session.execute(query)
+except Exception as e:
+    print(e)
+    
+query = "drop table artist_library"
+try:
+    rows = session.execute(query)
+except Exception as e:
+    print(e)
+    
+query = "drop table song_listeners_library"
+try:
+    rows = session.execute(query)
+except Exception as e:
+    print(e)
+```
+
+## Close the session and cluster connection
+
+```py
+session.shutdown()
+cluster.shutdown()
+```
+
+
+
+
+
+
+
+
+
