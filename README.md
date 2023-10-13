@@ -88,17 +88,82 @@ with open('event_datafile_new.csv', 'r', encoding = 'utf8') as f:
 Number of rows in event_datafile_new.csv: 6821
 
 
-
+---
 
 
 ## Part II. Complete the Apache Cassandra coding portion of your project.
 
 #### The event_datafile_new.csv contains the following columns:
 
-![](/assets/img/)
+![](/assets/img/Screenshot1.png)
+![](/assets/img/Screenshot2.png)
+
+---
+
+#### Creating a Cluster
+
+```py
+# This should make a connection to a Cassandra instance your local machine 
+# (127.0.0.1)
+
+from cassandra.cluster import Cluster
+cluster = Cluster()
+
+# To establish connection and begin executing queries, need a session
+session = cluster.connect()
+```
+
+#### Create Keyspace
+
+```py
+# TO-DO: Create a Keyspace 
+try:
+    session.execute("""
+    CREATE KEYSPACE IF NOT EXISTS project1b
+    WITH REPLICATION =
+    { 'class'  :  'SimpleStrategy', 'replication_factor' : 1 }"""
+)
+    
+except Exception as e:
+    print(e)
+```
+
+#### Set Keyspace
+
+```py
+# TO-DO: Set KEYSPACE to the keyspace specified above
+try:
+    session.set_keyspace('project1b')
+except Exception as e:
+    print(e)
+```
+
+#### Now we need to create tables to run the following queries. Remember, with Apache Cassandra you model the database tables on the queries you want to run.
+
+### Create queries to ask the following three questions of the data
+
+1. Give me the artist, song title and song's length in the music app history that was heard during sessionId = 338, and itemInSession = 4
+2. Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
+3. Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
 
 
+## Query 1
+Give me the artist, song title and song's length in the music app history that was heard during sessionId = 338, and itemInSession = 4
 
+```py
+## TO-DO: Query 1:  Give me the artist, song title and song's length in the music app history that was heard during \
+## sessionId = 338, and itemInSession = 4
 
-
-
+table_query = """
+    CREATE TABLE IF NOT EXISTS listening_library (
+        session_id int, 
+        item_in_session int, 
+        artist text, 
+        length float, 
+        song text, 
+        PRIMARY KEY (session_id, item_in_session)
+    );"""
+try:
+    session.execute(table_query)
+except Exception as e:
+    print(e)
