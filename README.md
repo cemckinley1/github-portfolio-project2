@@ -178,9 +178,10 @@ with open(file, encoding = 'utf8') as f:
         session.execute(query, (int(line[8]), int(line[3]), line[0], float(line[5]), line[9]))
 
 
-query = """SELECT * 
-           FROM listening_library 
-           WHERE session_id = %s AND item_in_session = %s
+query = """
+        SELECT  artist, song, length
+        FROM listening_library 
+        WHERE session_id = %s AND item_in_session = %s
 """
 try:
     rows = session.execute(query, (338,4))
