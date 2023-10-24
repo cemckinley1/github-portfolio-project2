@@ -230,9 +230,10 @@ with open(file, encoding = 'utf8') as f:
 
 
 
-query = """SELECT * 
-           FROM artist_library 
-           WHERE user_id = %s AND session_id = %s
+query = """
+        SELECT  artist, song, item_in_session, first_name, last_name
+        FROM artist_library 
+        WHERE user_id = %s AND session_id = %s
 """
 try:
     rows = session.execute(query, (10,182))
