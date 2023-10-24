@@ -283,7 +283,7 @@ with open(file, encoding = 'utf8') as f:
 
 
 query = """
-    SELECT *
+    SELECT first_name, last_name
     FROM song_listeners_library
     WHERE song='All Hands Against His Own'
 """
